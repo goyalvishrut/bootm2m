@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <changeSet id="1" author="bootm2m">
+        <createTable tableName="student">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="courses">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="bootm2m">
+        <createTable tableName="student_enrolled_in_course">
+            <column name="student_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="course_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="student_enrolled_in_course"
+                baseColumnNames="student_id"
+                constraintName="fk_student_id"
+                referencedTableName="student"
+                referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="student_enrolled_in_course"
+                baseColumnNames="course_id"
+                constraintName="fk_course_id"
+                referencedTableName="courses"
+                referencedColumnNames="id"/>
+
+        <addUniqueConstraint
+                tableName="student_enrolled_in_course"
+                columnNames="student_id,course_id"/>
+
+        <createIndex
+                tableName="student_enrolled_in_course"
+                indexName="idx_course_id">
+            <column name="course_id"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>
